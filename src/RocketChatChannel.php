@@ -108,7 +108,7 @@ class Channel extends Client
 	public function postMessage($text, $alias = null, $emoji = null, $avatar = null)
 	{
 		$body = array();
-		$body["channel"] = "#{$this->name}";
+		(substr($this->name, 0, 1) == "#" ? $body["channel"] = $this->name : $body["roomId"] = $this->name);
 		$body["text"] = $text;
 		if ($alias) $body["alias"] = $alias;
 		if ($alias) $body["emoji"] = $emoji;

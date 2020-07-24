@@ -11,7 +11,7 @@ to your `composer.json` file:
 ```json
 {
     "require": {
-        "fab1en/rocket-chat-rest-client": "dev-master"
+        "EsupPortail/rocket-chat-rest-client": "dev-master"
     }
 }
 ```
@@ -23,12 +23,7 @@ And run composer to update your dependencies:
 
 Then, import the `autoload.php` from your `vendor` folder.
 
-After this, you have to define some constants to point to your Rocket Chat instance
-
-```php
-define('REST_API_ROOT', '/api/v1/');
-define('ROCKET_CHAT_INSTANCE', 'https://my-rocket-chat-instance.example.org');
-```
+After this, you have to copy the file config-sample.php to config.php and complete it with the information of your Rocket Chat instance
 
 Finally, instance the classes you need:
 ```php
@@ -36,7 +31,7 @@ $api = new \RocketChat\Client();
 echo $api->version(); echo "\n";
 
 // login as the main admin user
-$admin = new \RocketChat\User('my-admin-name', 'my-admin-password');
+$admin = new \RocketChat\User($api_user, $api_pwd);
 if( $admin->login() ) {
 	echo "admin user logged in\n";
 };

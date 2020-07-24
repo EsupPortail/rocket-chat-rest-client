@@ -78,6 +78,25 @@ class Client{
 	}
 
 	/**
+	* List all the private groups
+	*/
+	public function list_groups_all() {
+		$response = Request::get( $this->api . 'groups.listAll' )->send();
+
+		if( $response->code == 200 && isset($response->body->success) && $response->body->success == true ) {
+			$groups = array();
+			foreach($response->body->groups as $group){
+				$groups[] = new Group($group);
+			}
+			return $groups;
+		} else {
+			var_dump( $response );
+			//echo( $response->body->error . "\n" );
+			return false;
+		}
+	}
+
+	/**
 	* List the channels the caller has access to.
 	*/
 	public function list_channels() {

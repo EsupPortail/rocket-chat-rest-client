@@ -11,6 +11,7 @@ class Group extends Client {
 	public $name;
 	public $members = array();
 	public $archived = false;
+	public $announcement = "";
 
 	public function __construct($name, $members = array()){
 		parent::__construct();
@@ -78,6 +79,11 @@ class Group extends Client {
 			} else {
 				$this->archived = false;
 			}
+			if (isset($response->body->group->announcement)) {
+				$this->announcement = $response->body->group->announcement;
+			} else {
+				$this->announcement = "";
+			}
 			return $response->body;
 		} else {
 			if ($verbose){
@@ -108,6 +114,28 @@ class Group extends Client {
 			return false;
 		}
 	}
+
+	/**
+	* Set the announcement of this group, as the logged-in user
+	*/
+	public function setAnnouncement( $text, $verbose = false ) {
+		$message = is_string($text) ? array( 'announcement' => $text ) : $text;
+
+		$response = Request::post( $this->api . 'groups.setAnnouncement' )
+			->body( array_merge(array('roomId' => $this->id), $message) )
+			->send();
+
+		if( $response->code == 200 && isset($response->body->success) && $response->body->success == true ) {
+			$this->announcement = $text;
+			return true;
+		} else {
+			if ($verbose){
+				if( isset($response->body->error) )	echo( $response->body->error . "\n" );
+			}
+			return false;
+		}
+	}
+
 
 	/**
 	* Removes the private group from the user’s list of groups, only if you’re part of the group.

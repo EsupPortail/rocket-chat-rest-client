@@ -99,6 +99,17 @@ final class GroupTest extends TestCase
     /**
     * @depends testCanCreateGroup
     */
+    public function testCanMakeAnnouncement($group): void
+    {
+        $this->assertTrue($group->setAnnouncement("Test announcement", true), "Can't set announcement");
+        $this->assertIsString($group->announcement, "Announcement is not a string");
+        $this->assertTrue($group->setAnnouncement("", true), "Can't empty announcement");
+        $this->assertStringMatchesFormat("", $group->announcement, "Announcement is not an empty string");
+    }
+
+    /**
+    * @depends testCanCreateGroup
+    */
     public function testCanDeleteGroup($group): void
     {
         $this->assertTrue($group->delete());

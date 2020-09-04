@@ -110,6 +110,14 @@ final class GroupTest extends TestCase
     /**
     * @depends testCanCreateGroup
     */
+    public function testCanCreateInviteLink($group): void
+    {
+      $this->assertStringMatchesFormat( ROCKET_CHAT_INSTANCE.'/invite/%s',$group->getInviteLink());
+    }
+
+    /**
+    * @depends testCanCreateGroup
+    */
     public function testCanDeleteGroup($group): void
     {
         $this->assertTrue($group->delete());

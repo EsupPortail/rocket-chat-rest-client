@@ -347,4 +347,24 @@ class Group extends Client {
 		}
 	}
 
+	/**
+	* Create a link to invite users to this group
+	* 	$days :    The number of days that the invite will be valid for.
+	*		$maxUses : The number of times that the invite can be used.
+	*/
+	public function getInviteLink($days=0, $maxUses=0){
+
+		$response = Request::post( $this->api . 'findOrCreateInvite' )
+			->body(array('rid' => $this->id, 'days' => $days, 'maxUses' => $maxUses ))
+			->send();
+
+		if( $response->code == 200 && isset($response->body->success) && $response->body->success == true ) {
+			return $response->body->url;
+		} else {
+			if ($verbose) {
+				echo( $response->body->error . "\n" );
+			}
+			return false;
+		}
+	}
 }

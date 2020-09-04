@@ -27,6 +27,7 @@ After this, you have to copy the file config-sample.php to config.php and comple
 
 Finally, instance the classes you need:
 ```php
+// Initiate the connection
 $api = new \RocketChat\Client();
 echo $api->version(); echo "\n";
 
@@ -61,5 +62,62 @@ $channel->create();
 // post a message
 $channel->postMessage('Hello world');
 ```
+
+## Create  group
+___Warning___ : To be able to manipulate groups, the admin user used to create groups shall remain a member of the group.
+```php
+$group = new Group("testapiRC_group");
+$group->create();
+echo "The group ".$group->name." is created with the id ".$group->id;
+```
+
+## Create user
+```php
+$user = new User("testapiRC_user","dummyPwd", array("email" => "test@test.org", "nickname" => "Test API user"));
+$user->create();
+echo "The user ".$user->nickname." is created with the id ".$user->id;
+```
+
+## Invite user to group
+```php
+$group->invite($user);
+echo "Members of group ".$group->name." :<br/>";
+foreach ($group->members() as $member) {
+	$member->print_info();
+}
+```
+
+## Set user as moderator
+```php
+$group->addModerator($user);
+```
+
+## Archive and unarchive group
+```php
+$group->archive();
+$group->unarchive();
+```
+
+## Kick user from group
+```php
+$group->kick($user);
+echo "Members of group ".$group->name." :<br/>";
+foreach ($group->members() as $member) {
+	$member->print_info();
+}
+```
+
+## Get invite link
+```php
+$inviteLink = $group->getInviteLink();
+echo "Send this link to your friends : ".$inviteLink;
+```
+
+## Delete user and group
+```php
+$user->delete();
+$group->delete();
+```
+
 ## Credits
 This REST client uses the excellent [Httpful](http://phphttpclient.com/) PHP library by [Nate Good](https://github.com/nategood) ([github repo is here](https://github.com/nategood/httpful)).

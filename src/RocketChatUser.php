@@ -55,6 +55,19 @@ class User extends Client {
 		}
 	}
 
+    public function logout() {
+        $response = Request::post( $this->api . 'logout' )
+            ->send();
+
+        if( $response->code == 200 && isset($response->body->status) && $response->body->status == 'success' ) {
+            Request::resetIni();
+            return true;
+        } else {
+            echo( $response->body->message . "\n" );
+            return false;
+        }
+    }
+
 	/**
 	* Gets a user’s information, limited to the caller’s permissions.
 	*/

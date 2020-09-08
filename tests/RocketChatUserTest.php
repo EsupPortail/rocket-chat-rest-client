@@ -1,9 +1,12 @@
 <?php
+
+namespace RocketChat;
+
 use PHPUnit\Framework\TestCase;
 use RocketChat\Client;
 use RocketChat\User;
 
-include_once(dirname(dirname(__FILE__))."/config.php");
+include_once(dirname(dirname(__FILE__))."/config-sample.php");
 
 final class UserTest extends TestCase
 {

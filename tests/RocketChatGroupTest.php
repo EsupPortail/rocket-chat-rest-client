@@ -4,12 +4,12 @@ use RocketChat\Client;
 use RocketChat\Group;
 use RocketChat\User;
 
-include_once(dirname(dirname(__FILE__))."/config.php");
 
 final class GroupTest extends TestCase
 {
     public function testCanInstantiateGroup(): Group
     {
+      include_once(dirname(dirname(__FILE__))."/config-sample.php");
       $group = new Group("testapi_group");
       $this->assertInstanceOf(
           Group::class,
@@ -17,6 +17,17 @@ final class GroupTest extends TestCase
       );
       return $group;
     }
+
+    public function testCanInstantiateGroupWithoutConfigFile(): Group
+    {
+        $group = new Group("testapi_group", array(), 'https://chat.yourorganisation.org', '/api/v1/');
+        $this->assertInstanceOf(
+            Group::class,
+            $group
+        );
+        return $group;
+    }
+
 
     /**
     * @depends testCanInstantiateGroup

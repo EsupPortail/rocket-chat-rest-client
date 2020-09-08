@@ -16,8 +16,12 @@ class Settings extends Client {
 	/**
 	* $file : path to the json file containing the setting collection.
 	*/
-	public function __construct($file){
-		parent::__construct();
+	public function __construct($file, $instanceurl = null, $restroot = null){
+		if(!is_null($instanceurl) && !is_null($restroot)){
+			parent::__construct($instanceurl, $restroot);
+		}else {
+			parent::__construct();
+		}
 		$this->file = $file;
 	}
 

@@ -15,8 +15,12 @@ class Channel extends Client
 	public $name;
 	public $members = array();
 
-	public function __construct($name, $members = array())
-	{
+	public function __construct($name, $members = array(), $instanceurl = null, $restroot = null){
+		if(!is_null($instanceurl) && !is_null($restroot)){
+			parent::__construct($instanceurl, $restroot);
+		}else {
+			parent::__construct();
+		}
 		parent::__construct();
 		if (is_string($name))
 		{

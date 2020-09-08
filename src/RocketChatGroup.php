@@ -13,8 +13,12 @@ class Group extends Client {
 	public $archived = false;
 	public $announcement = "";
 
-	public function __construct($name, $members = array()){
-		parent::__construct();
+	public function __construct($name, $members = array(), $instanceurl = null, $restroot = null){
+		if(!is_null($instanceurl) && !is_null($restroot)){
+			parent::__construct($instanceurl, $restroot);
+		}else {
+			parent::__construct();
+		}
 		if( is_string($name) ) {
 			$this->name = $name;
 		} else if( isset($name->_id) ) {
@@ -349,7 +353,7 @@ class Group extends Client {
 
 	/**
 	* Create a link to invite users to this group
-	* 	$days :    The number of days that the invite will be valid for.
+	* 	$days :	The number of days that the invite will be valid for.
 	*		$maxUses : The number of times that the invite can be used.
 	*/
 	public function getInviteLink($days=0, $maxUses=0){

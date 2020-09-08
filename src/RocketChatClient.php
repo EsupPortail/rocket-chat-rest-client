@@ -9,8 +9,12 @@ class Client{
 	public $api;
 
 	function __construct(){
-		$this->api = ROCKET_CHAT_INSTANCE . REST_API_ROOT;
-
+		$args = func_get_args();
+		if( count($args) == 2){
+			$this->api = $args[0].$args[1];
+		}else{
+			$this->api = ROCKET_CHAT_INSTANCE . REST_API_ROOT;
+		}
 		// set template request to send and expect JSON
 		$tmp = Request::init()
 			->sendsJson()

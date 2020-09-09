@@ -11,9 +11,10 @@ class Group extends Client {
 	public $name;
 	public $members = array();
 	public $archived = false;
+	public $readonly = true;
 	public $announcement = "";
 
-	public function __construct($name, $members = array(), $instanceurl = null, $restroot = null){
+	public function __construct($name, $members = array(), $options = array(), $instanceurl = null, $restroot = null){
 		if(!is_null($instanceurl) && !is_null($restroot)){
 			parent::__construct($instanceurl, $restroot);
 		}else {
@@ -24,6 +25,12 @@ class Group extends Client {
 		} else if( isset($name->_id) ) {
 			$this->name = $name->name;
 			$this->id = $name->_id;
+		}
+		if( isset($options['readonly'])){
+			$this->readonly = (bool) $options['readonly'];
+		}
+		if( isset($options['archived'])){
+			$this->archived = (bool) $options['archived'];
 		}
 		foreach($members as $member){
 			if( is_a($member, '\RocketChat\User') ) {
@@ -50,7 +57,7 @@ class Group extends Client {
 		}
 
 		$response = Request::post( $this->api . 'groups.create' )
-			->body(array('name' => $this->name, 'members' => $members_id))
+			->body(array('name' => $this->name, 'members' => $members_id, 'archived' => $this->archived, 'readonly' => $this->readonly))
 			->send();
 
 		if( $response->code == 200 && isset($response->body->success) && $response->body->success == true ) {

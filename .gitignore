@@ -1,5 +1,6 @@
 .idea
 config.php
+config-test.php
 vendor
 composer.lock
 .phpunit.result.cache

@@ -23,16 +23,24 @@ And run composer to update your dependencies:
 
 Then, import the `autoload.php` from your `vendor` folder.
 
-After this, you have to copy the file config-sample.php to config.php and complete it with the information of your Rocket Chat instance
+#### Configure your Rocket.Chat instance
+you have to way to do that
+##### config file
+* You have to copy the file config-sample.php to config.php and complete it with the information of your Rocket Chat instance
 
-Finally, instance the classes you need:
+##### passing instance url and rest root to constructors
+* as optional arguments
+
+#### classes instances examples
+
+##### Initiate Connection
 ```php
 // Initiate the connection
-$api = new \RocketChat\Client();
+$api = new \RocketChat\Client(); // with config file or add instance url and rest root as parameters without config file
 echo $api->version(); echo "\n";
 
 // login as the main admin user
-$admin = new \RocketChat\User($api_user, $api_pwd);
+$admin = new \RocketChat\User($api_user, $api_pwd); // with config file or add instance url and rest root as parameters without config file
 if( $admin->login() ) {
 	echo "admin user logged in\n";
 };
@@ -40,13 +48,13 @@ $admin->info();
 echo "I'm {$admin->nickname} ({$admin->id}) "; echo "\n";
 ```
 
-## Manage user
+#### Manage user
 ```php
 // create a new user
 $newuser = new \RocketChat\User('new_user_name', 'new_user_password', array(
 	'nickname' => 'New user nickname',
 	'email' => 'newuser@example.org',
-));
+)); // with config file or add instance url and rest root as parameters without config file
 if( !$newuser->login(false) ) {
 	// actually create the user if it does not exist yet
   $newuser->create();
@@ -54,31 +62,31 @@ if( !$newuser->login(false) ) {
 echo "user {$newuser->nickname} created ({$newuser->id})\n";
 ```
 
-## Post a message
+##### Post a message
 ```php
 // create a new channel
-$channel = new \RocketChat\Channel( 'my_new_channel', array($newuser, $admin) );
+$channel = new \RocketChat\Channel( 'my_new_channel', array($newuser, $admin) ); // with config file or add instance url and rest root as parameters without config file
 $channel->create();
 // post a message
 $channel->postMessage('Hello world');
 ```
 
-## Create  group
+##### Create  group
 ___Warning___ : To be able to manipulate groups, the admin user used to create groups shall remain a member of the group.
 ```php
-$group = new Group("testapiRC_group");
+$group = new Group("testapiRC_group"); // with config file or add $members = array(), $options = array(), $instanceurl = null, $restroot = null  without config file 
 $group->create();
 echo "The group ".$group->name." is created with the id ".$group->id;
 ```
 
-## Create user
+##### Create user
 ```php
-$user = new User("testapiRC_user","dummyPwd", array("email" => "test@test.org", "nickname" => "Test API user"));
+$user = new User("testapiRC_user","dummyPwd", array("email" => "test@test.org", "nickname" => "Test API user")); // with config file or add instance url and rest root as parameters without config file
 $user->create();
 echo "The user ".$user->nickname." is created with the id ".$user->id;
 ```
 
-## Invite user to group
+##### Invite user to group
 ```php
 $group->invite($user);
 echo "Members of group ".$group->name." :<br/>";
@@ -87,18 +95,18 @@ foreach ($group->members() as $member) {
 }
 ```
 
-## Set user as moderator
+##### Set user as moderator
 ```php
 $group->addModerator($user);
 ```
 
-## Archive and unarchive group
+##### Archive and unarchive group
 ```php
 $group->archive();
 $group->unarchive();
 ```
 
-## Kick user from group
+##### Kick user from group
 ```php
 $group->kick($user);
 echo "Members of group ".$group->name." :<br/>";
@@ -107,13 +115,13 @@ foreach ($group->members() as $member) {
 }
 ```
 
-## Get invite link
+##### Get invite link
 ```php
 $inviteLink = $group->getInviteLink();
 echo "Send this link to your friends : ".$inviteLink;
 ```
 
-## Delete user and group
+##### Delete user and group
 ```php
 $user->delete();
 $group->delete();

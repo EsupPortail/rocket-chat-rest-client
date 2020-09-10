@@ -6,57 +6,57 @@ use PHPUnit\Framework\TestCase;
 use RocketChat\Client;
 use RocketChat\User;
 
-include_once(dirname(dirname(__FILE__))."/config-sample.php");
+include_once(dirname(dirname(__FILE__))."/config-test.php");
 
 final class UserTest extends TestCase
 {
-    public function testCanCreateUserWithoutPassword(): void
-    {
-        global $api_user;
-        $this->assertInstanceOf(
-            User::class,
-            new User($api_user)
-        );
-    }
+	public function testCanCreateUserWithoutPassword(): void
+	{
+		global $api_user;
+		$this->assertInstanceOf(
+			User::class,
+			new User($api_user)
+		);
+	}
 
-    public function testCanCreateUserWithPassword(): User
-    {
-        global $api_user, $api_pwd;
-        $user = new User($api_user, $api_pwd);
-        $this->assertInstanceOf(
-            User::class,
-            $user
-        );
-        return $user;
-    }
+	public function testCanCreateUserWithPassword(): User
+	{
+		global $api_user, $api_pwd;
+		$user = new User($api_user, $api_pwd);
+		$this->assertInstanceOf(
+			User::class,
+			$user
+		);
+		return $user;
+	}
 
-    /**
-    * @depends testCanCreateUserWithPassword
-    */
-    public function testCanLogin($api_user): void
-    {
+	/**
+	* @depends testCanCreateUserWithPassword
+	*/
+	public function testCanLogin($api_user): void
+	{
 
-        $this->assertTrue($api_user->login());
-    }
+		$this->assertTrue($api_user->login());
+	}
 
-    /**
-    * @depends testCanLogin
-    * @dataProvider userProvider
-    */
-    public function testCanCreateUser($username, $password, $attributes, $expected): void
-    {
-        $user = new User($username, $password, $attributes);
-        $this->assertInstanceOf(
-          User::class,
-          $user
-        );
-        if ($expected) {
-          $this->assertNotFalse($user_returned = $user->create());
-          $this->assertSame($username, $user_returned->username);
-          $this->assertSame($attributes["email"], $user_returned->emails[0]->address);
-          $this->assertSame($attributes["nickname"], $user_returned->name);
-        } else {
-          $this->assertFalse($user->create());
+	/**
+	* @depends testCanLogin
+	* @dataProvider userProvider
+	*/
+	public function testCanCreateUser($username, $password, $attributes, $expected): void
+	{
+		$user = new User($username, $password, $attributes);
+		$this->assertInstanceOf(
+		  User::class,
+		  $user
+		);
+		if ($expected) {
+		  $this->assertNotFalse($user_returned = $user->create());
+		  $this->assertSame($username, $user_returned->username);
+		  $this->assertSame($attributes["email"], $user_returned->emails[0]->address);
+		  $this->assertSame($attributes["nickname"], $user_returned->name);
+		} else {
+		  $this->assertFalse($user->create());
         }
     }
 

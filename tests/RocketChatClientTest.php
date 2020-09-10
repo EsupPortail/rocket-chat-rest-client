@@ -5,24 +5,16 @@ use PHPUnit\Framework\TestCase;
 use RocketChat\Client;
 
 
-
+include_once(dirname(dirname(__FILE__))."/config-test.php");
 
 final class ClientTest extends TestCase
 {
-    public function testCanCreateConnexionWithConfigFile(): void
-    {
-        include_once(dirname(dirname(__FILE__))."/config-sample.php");
-        $this->assertInstanceOf(
-            Client::class,
-            new Client()
-        );
-    }
-    public function testCanCreateConnexionWithoutConfigFile(): void
-    {
-        $this->assertInstanceOf(
-            Client::class,
-            new Client('https://chat.yourorganisation.org', '/api/v1/')
-        );
-    }
+	public function testCanCreateConnexionWithConfigFile(): void
+	{
+		$this->assertInstanceOf(
+			Client::class,
+			new Client()
+		);
+	}
 }
 ?>

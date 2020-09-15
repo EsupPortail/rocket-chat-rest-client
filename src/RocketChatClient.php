@@ -117,5 +117,24 @@ class Client{
 			return false;
 		}
 	}
+	
+	public function info( $user, $verbose = false ) {
+		if (isset($this->id )){
+			// If the id is defined, we use it
+			$response = Request::get( $this->api . 'users.info?userId=' . $user->id )->send();
+		} else {
+			// If the id is not defined, we use the name
+			$response = Request::get( $this->api . 'users.info?username=' . $user->username )->send();
+		}
+
+		if( $response->code == 200 && isset($response->body->success) && $response->body->success == true ) {
+			return $response->body->user;
+		} else {
+			if ($verbose) {
+				echo( $response->body->error . "\n" );
+			}
+			return false;
+		}
+	}
 
 }

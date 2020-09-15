@@ -239,11 +239,15 @@ class Group extends Client {
 	 * Adds user to the private group.
 	 */
 	public function invite( $user, $verbose = false ) {
-
-		$userId = is_string($user) ? $user : $user->id;
-
+		$userInfo = is_string($user)? $user : $user->id;
+		$params = array('roomId' => $this->id);
+		if(is_string($user)){
+			$params['userName'] = $user;
+		}else{
+			$params['userId'] = $user->id;
+		}
 		$response = Request::post( $this->api . 'groups.invite' )
-			->body(array('roomId' => $this->id, 'userId' => $userId))
+			->body($params)
 			->send();
 
 		if( $response->code == 200 && isset($response->body->success) && $response->body->success == true ) {

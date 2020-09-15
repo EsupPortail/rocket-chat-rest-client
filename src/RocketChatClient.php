@@ -118,7 +118,7 @@ class Client{
 		}
 	}
 	
-	public function info( $user, $verbose = false ) {
+	public function user_info( $user, $verbose = false ) {
 		if (isset($this->id )){
 			// If the id is defined, we use it
 			$response = Request::get( $this->api . 'users.info?userId=' . $user->id )->send();

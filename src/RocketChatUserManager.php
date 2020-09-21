@@ -80,7 +80,7 @@ class UserManager extends Client {
 	 */
 	public function create($user, $verbose = false ) {
 		$info = $this->info($user);
-		if ($info) return $info;
+		if ($info and isset($info->user)) return $info->user;
 
 		$response = Request::post( $this->api . 'users.create' )
 			->body(array(
@@ -105,6 +105,7 @@ class UserManager extends Client {
 	 * Deletes an existing user.
 	 */
 	public function delete($userid) {
+        $info = $this->info($userid);
 		$response = Request::post( $this->api . 'users.delete' )
 			->body(array('userId' => $userid))
 			->send();

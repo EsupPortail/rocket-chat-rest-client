@@ -105,7 +105,6 @@ class UserManager extends Client {
 	 * Deletes an existing user.
 	 */
 	public function delete($userid) {
-        $info = $this->info($userid);
 		$response = Request::post( $this->api . 'users.delete' )
 			->body(array('userId' => $userid))
 			->send();

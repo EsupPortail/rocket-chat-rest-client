@@ -7,13 +7,19 @@ use Httpful\Request;
 class Client{
 
 	public $api;
+	protected $instanceurl;
+	public $restroot;
 
 	function __construct(){
 		$args = func_get_args();
 		if( count($args) == 2){
 			$this->api = $args[0].$args[1];
+			$this->instanceurl = $args[0];
+			$this->restroot = $args[1];
 		}else{
 			$this->api = ROCKET_CHAT_INSTANCE . REST_API_ROOT;
+			$this->instanceurl = ROCKET_CHAT_INSTANCE;
+			$this->restroot = REST_API_ROOT;
 		}
 		// set template request to send and expect JSON
 		$tmp = Request::init()

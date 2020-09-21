@@ -345,7 +345,7 @@ class Group extends Client {
 		if( $response->code == 200 && isset($response->body->success) && $response->body->success == true ) {
 			$members = array();
 			foreach($response->body->members as $member){
-				$user = new User($member->username, null, get_object_vars($member));
+				$user = new User($member->username, null, get_object_vars($member), $this->instanceurl, $this->restroot);
 				$user->info();
 				$members[] = $user;
 			}

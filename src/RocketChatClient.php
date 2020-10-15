@@ -15,7 +15,7 @@ class Client{
 
 	function __construct(){
 	    $this->logger = new Logger('Rocket.Chat.Rest.Api');
-	    $this->logger->pushHandler(new ErrorLogHandler(ErrorLogHandler::SAPI));
+	    $this->logger->pushHandler(new ErrorLogHandler(ErrorLogHandler::OPERATING_SYSTEM));
 		$args = func_get_args();
 		if( count($args) == 2){
 			$this->api = $args[0].$args[1];

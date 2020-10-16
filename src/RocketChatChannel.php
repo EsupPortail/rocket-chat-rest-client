@@ -21,7 +21,6 @@ class Channel extends Client
 		}else {
 			parent::__construct();
 		}
-		parent::__construct();
 		if (is_string($name))
 		{
 			$this->name = $name;

@@ -65,7 +65,8 @@ class Group extends Client {
 			return $response->body->group;
 		} else {
 			if($verbose){
-                $this->logger->error( $response->body->error . "\n" );
+                $message = isset($response->body->error) ? $response->body->error : $response->body->message;
+                $this->logger->error( "Group ".__FUNCTION__." error".$message . "\n" );
 			}
 			return false;
 		}
@@ -98,7 +99,8 @@ class Group extends Client {
 			return $response->body;
 		} else {
 			if ($verbose){
-                $this->logger->error( $response->body->error . "\n" );
+                $message = isset($response->body->error) ? $response->body->error : $response->body->message;
+                $this->logger->error( "Group ".__FUNCTION__." error".$message . "\n" );
 			}
 			return false;
 		}
@@ -120,12 +122,8 @@ class Group extends Client {
 		if( $response->code == 200 && isset($response->body->success) && $response->body->success == true ) {
 			return true;
 		} else {
-			if( isset($response->body->error) ) {
-                $this->logger->error( $response->body->error . "\n" );
-            }
-			else if( isset($response->body->message) ) {
-                $this->logger->error($response->body->message . "\n");
-            }
+            $message = isset($response->body->error) ? $response->body->error : $response->body->message;
+            $this->logger->error( "Group ".__FUNCTION__." error".$message . "\n" );
 			return false;
 		}
 	}
@@ -145,7 +143,8 @@ class Group extends Client {
 			return true;
 		} else {
 			if ($verbose){
-				if( isset($response->body->error) )	$this->logger->error( $response->body->error . "\n" );
+                $message = isset($response->body->error) ? $response->body->error : $response->body->message;
+                $this->logger->error( "Group ".__FUNCTION__." error".$message . "\n" );
 			}
 			return false;
 		}
@@ -163,7 +162,8 @@ class Group extends Client {
 		if( $response->code == 200 && isset($response->body->success) && $response->body->success == true ) {
 			return true;
 		} else {
-            $this->logger->error( $response->body->error . "\n" );
+            $message = isset($response->body->error) ? $response->body->error : $response->body->message;
+            $this->logger->error( "Group ".__FUNCTION__." error".$message . "\n" );
 			return false;
 		}
 	}
@@ -180,7 +180,8 @@ class Group extends Client {
 			$this->archived = true;
 			return true;
 		} else {
-			$this->logger->error( $response->body->error . "\n" );
+            $message = isset($response->body->error) ? $response->body->error : $response->body->message;
+            $this->logger->error( "Group ".__FUNCTION__." error".$message . "\n" );
 			return false;
 		}
 	}
@@ -197,7 +198,8 @@ class Group extends Client {
 			$this->archived = false;
 			return true;
 		} else {
-			$this->logger->error( $response->body->error . "\n" );
+            $message = isset($response->body->error) ? $response->body->error : $response->body->message;
+            $this->logger->error( "Group ".__FUNCTION__." error".$message . "\n" );
 			return false;
 		}
 	}
@@ -213,7 +215,8 @@ class Group extends Client {
 		if( $response->code == 200 && isset($response->body->success) && $response->body->success == true ) {
 			return true;
 		} else {
-			$this->logger->error( $response->body->error . "\n" );
+            $message = isset($response->body->error) ? $response->body->error : $response->body->message;
+            $this->logger->error( "Group ".__FUNCTION__." error".$message . "\n" );
 			return false;
 		}
 	}
@@ -233,7 +236,8 @@ class Group extends Client {
 			return true;
 		} else {
 			if ($verbose){
-				$this->logger->error( $response->body->error . "\n" );
+                $message = isset($response->body->error) ? $response->body->error : $response->body->message;
+                $this->logger->error( "Group ".__FUNCTION__." error".$message . "\n" );
 			}
 			return false;
 		}
@@ -254,7 +258,8 @@ class Group extends Client {
 			return true;
 		} else {
 			if ($verbose) {
-				$this->logger->error( $response->body->error . "\n" );
+                $message = isset($response->body->error) ? $response->body->error : $response->body->message;
+                $this->logger->error( "Group ".__FUNCTION__." error".$message . "\n" );
 			}
 			return false;
 		}
@@ -274,7 +279,8 @@ class Group extends Client {
 		if( $response->code == 200 && isset($response->body->success) && $response->body->success == true ) {
 			return true;
 		} else {
-			$this->logger->error( $response->body->error . "\n" );
+            $message = isset($response->body->error) ? $response->body->error : $response->body->message;
+            $this->logger->error( "Group ".__FUNCTION__." error".$message . "\n" );
 			return false;
 		}
 	}
@@ -293,7 +299,8 @@ class Group extends Client {
 		if( $response->code == 200 && isset($response->body->success) && $response->body->success == true ) {
 			return true;
 		} else {
-			$this->logger->error( $response->body->error . "\n" );
+            $message = isset($response->body->error) ? $response->body->error : $response->body->message;
+            $this->logger->error( "Group ".__FUNCTION__." error".$message . "\n" );
 			return false;
 		}
 	}
@@ -313,7 +320,8 @@ class Group extends Client {
 			return true;
 		} else {
 			if ($verbose) {
-				$this->logger->error( $response->body->error . "\n" );
+                $message = isset($response->body->error) ? $response->body->error : $response->body->message;
+                $this->logger->error( "Group addModerator error".$message . "\n" );
 			}
 			return false;
 		}
@@ -334,7 +342,8 @@ class Group extends Client {
 			return true;
 		} else {
 			if ($verbose) {
-				$this->logger->error( $response->body->error . "\n" );
+                $message = isset($response->body->error) ? $response->body->error : $response->body->message;
+                $this->logger->error( "Group removemoderator error".$message . "\n" );
 			}
 			return false;
 		}
@@ -356,7 +365,8 @@ class Group extends Client {
 			return $members;
 		} else {
 			if ($verbose){
-				$this->logger->error( "Can't list participants of this group. Error : ".$response->body->error . "\n" );
+                $message = isset($response->body->error) ? $response->body->error : $response->body->message;
+                $this->logger->error( "Group members error".$message . "\n" );
 			}
 			return false;
 		}
@@ -375,7 +385,8 @@ class Group extends Client {
             return $moderators;
         } else {
             if ($verbose){
-                $this->logger->error( "Can't list moderators of this group. Error : ".$response->body->error . "\n" );
+                $message = isset($response->body->error) ? $response->body->error : $response->body->message;
+                $this->logger->error( "Can't list moderators of this group. Error : ".$message . "\n" );
             }
             return false;
         }
@@ -395,7 +406,8 @@ class Group extends Client {
 		if( $response->code == 200 && isset($response->body->success) && $response->body->success == true ) {
 			return $response->body->url;
 		} else {
-			$this->logger->error( $response->body->error . "\n" );
+            $message = isset($response->body->error) ? $response->body->error : $response->body->message;
+            $this->logger->error( "Group getInviteLink error".$message . "\n" );
 			return false;
 		}
 	}
@@ -411,7 +423,8 @@ class Group extends Client {
             return $messages;
         } else {
             if ($verbose){
-                $this->logger->error( $response->body->error . "\n" );
+                $message = isset($response->body->error) ? $response->body->error : $response->body->message;
+                $this->logger->error( "Group getMessages error ".$message . "\n" );
             }
             return false;
         }
@@ -424,7 +437,8 @@ class Group extends Client {
                 $response = Request::get( $this->api . 'chat.delete?roomId=' . $this->id. '&msgId='.$messageid )->send();
                 if( $response->code != 200 || !isset($response->body->success) || $response->body->success != true ) {
                     if ($verbose){
-                        $this->logger->error( $response->body->error . "\n" );
+                        $message = isset($response->body->error) ? $response->body->error : $response->body->message;
+                        $this->logger->error( "Delete all messages ".$message . "\n" );
                     }
                 }
             }

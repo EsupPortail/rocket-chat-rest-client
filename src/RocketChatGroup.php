@@ -444,4 +444,13 @@ class Group extends Client {
             }
         }
     }
+    public function cleanHistory($verbose){
+        $response = Request::get( $this->api . 'rooms.cleanHistory?roomId=' . $this->id)->send();
+        if( $response->code != 200 || !isset($response->body->success) || $response->body->success != true ) {
+            if ($verbose){
+                $message = isset($response->body->error) ? $response->body->error : $response->body->message;
+                $this->logger->error( "Delete all messages ".$message . "\n" );
+            }
+        }
+    }
 }

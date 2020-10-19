@@ -395,14 +395,12 @@ class Group extends Client {
 		if( $response->code == 200 && isset($response->body->success) && $response->body->success == true ) {
 			return $response->body->url;
 		} else {
-			if ($verbose) {
-				$this->logger->error( $response->body->error . "\n" );
-			}
+			$this->logger->error( $response->body->error . "\n" );
 			return false;
 		}
 	}
 
-	public function getMessagesId($verbose){
+	public function getMessages($verbose){
         $response = Request::get( $this->api . 'groups.messages?roomId=' . $this->id )->send();
 
         if( $response->code == 200 && isset($response->body->success) && $response->body->success == true ) {
@@ -413,26 +411,26 @@ class Group extends Client {
             return $messages;
         } else {
             if ($verbose){
-                $this->logger->error( "Can't list moderators of this group. Error : ".$response->body->error . "\n" );
+                $this->logger->error( $response->body->error . "\n" );
             }
             return false;
         }
     }
 
     public function deleteAllMessages($verbose){
-	    $messages = $this->getMessagesId($verbose);
+	    $messages = $this->getMessages($verbose);
 	    if($messages){
 	        foreach ($messages as $message){
                 $response = Request::get( $this->api . 'chat.delete?roomId=' . $this->id. '&msgId='.$message )->send();
                 if( $response->code == 200 && isset($response->body->success) && $response->body->success == true ) {
                     $messages = array();
                     foreach($response->body->messages as $message){
-                        $messages[] = $message->_id;
+                        $messages[$message->_id] = $message;
                     }
                     return $messages;
                 } else {
                     if ($verbose){
-                        $this->logger->error( "Can't remove message $message for the  group. Error : ".$response->body->error . "\n" );
+                        $this->logger->error( $response->body->error . "\n" );
                     }
                 }
             }

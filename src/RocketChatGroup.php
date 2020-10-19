@@ -412,7 +412,7 @@ class Group extends Client {
 		}
 	}
 
-	public function getMessages($verbose){
+	public function getMessages($verbose=false){
         $response = Request::get( $this->api . 'groups.messages?roomId=' . $this->id )->send();
 
         if( $response->code == 200 && isset($response->body->success) && $response->body->success == true ) {
@@ -430,7 +430,7 @@ class Group extends Client {
         }
     }
 
-    public function cleanHistory($oldest='1970-01-01', $latest='now',$verbose){
+    public function cleanHistory($oldest='1970-01-01', $latest='now',$verbose=false){
         //$response = Request::post( $this->api . 'rooms.cleanHistory?roomId=' . $this->id)->send();
         $oldest = new \DateTime($oldest);
         $latest = new \DateTime($latest);

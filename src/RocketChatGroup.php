@@ -430,22 +430,14 @@ class Group extends Client {
         }
     }
 
-    public function deleteAllMessages($verbose){
-	    $messages = $this->getMessages($verbose);
-	    if($messages){
-	        foreach (array_keys($messages) as $messageid){
-                $response = Request::get( $this->api . 'chat.delete?roomId=' . $this->id. '&msgId='.$messageid )->send();
-                if( $response->code != 200 || !isset($response->body->success) || $response->body->success != true ) {
-                    if ($verbose){
-                        $message = isset($response->body->error) ? $response->body->error : $response->body->message;
-                        $this->logger->error( "Delete all messages ".$message . "\n" );
-                    }
-                }
-            }
-        }
-    }
-    public function cleanHistory($verbose){
-        $response = Request::get( $this->api . 'rooms.cleanHistory?roomId=' . $this->id)->send();
+    public function cleanHistory($oldest='1970-01-01', $latest='now',$verbose){
+        //$response = Request::post( $this->api . 'rooms.cleanHistory?roomId=' . $this->id)->send();
+        $oldest = new \DateTime($oldest);
+        $latest = new \DateTime($latest);
+        $format = 'Y-m-d\TH:i:s.u\Z';
+
+        $response = Request::post( $this->api . 'rooms.cleanHistory')
+        ->body(array('roomId' => $this->id, 'oldest' => $oldest->format($format), 'latest' => $latest->format($format)))->send();
         if( $response->code != 200 || !isset($response->body->success) || $response->body->success != true ) {
             if ($verbose){
                 $message = isset($response->body->error) ? $response->body->error : $response->body->message;

@@ -406,7 +406,7 @@ class Group extends Client {
         if( $response->code == 200 && isset($response->body->success) && $response->body->success == true ) {
             $messages = array();
             foreach($response->body->messages as $message){
-                $messages[] = $message->_id;
+                $messages[$message->_id] = $message;
             }
             return $messages;
         } else {

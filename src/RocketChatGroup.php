@@ -420,15 +420,9 @@ class Group extends Client {
     public function deleteAllMessages($verbose){
 	    $messages = $this->getMessages($verbose);
 	    if($messages){
-	        foreach ($messages as $message){
-                $response = Request::get( $this->api . 'chat.delete?roomId=' . $this->id. '&msgId='.$message )->send();
-                if( $response->code == 200 && isset($response->body->success) && $response->body->success == true ) {
-                    $messages = array();
-                    foreach($response->body->messages as $message){
-                        $messages[$message->_id] = $message;
-                    }
-                    return $messages;
-                } else {
+	        foreach (array_keys($messages) as $messageid){
+                $response = Request::get( $this->api . 'chat.delete?roomId=' . $this->id. '&msgId='.$messageid )->send();
+                if( $response->code != 200 || !isset($response->body->success) || $response->body->success != true ) {
                     if ($verbose){
                         $this->logger->error( $response->body->error . "\n" );
                     }

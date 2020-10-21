@@ -444,4 +444,21 @@ class Group extends Client {
             }
         }
     }
+
+    public function isGroupAlreadyExists($verbose=false){
+        $response = Request::get( $this->api . 'admin.rooms?filter=' . $this->id )->send();
+
+        if( $response->code == 200 && isset($response->body->success) && $response->body->success == true ) {
+            foreach($response->body->rooms as $room){
+                // RoomId is unique so can go out.
+                return true;
+            }
+        } else {
+            if ($verbose){
+                $message = isset($response->body->error) ? $response->body->error : $response->body->message;
+                $this->logger->error( "Group isGroupAlreadyExists error ".$message . "\n" );
+            }
+            return false;
+        }
+    }
 }

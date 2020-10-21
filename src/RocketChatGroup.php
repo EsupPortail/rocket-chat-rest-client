@@ -446,12 +446,23 @@ class Group extends Client {
     }
 
     public function isGroupAlreadyExists($verbose=false){
-        $response = Request::get( $this->api . 'admin.rooms?filter=' . $this->id )->send();
+        if(isset($this->id)) {
+            $response = Request::get( $this->api . 'rooms.adminRooms?filter=' . $this->id )->send();
+        } else {
+            $response = Request::get( $this->api . 'rooms.adminRooms?filter=' . $this->name )->send();
+        }
+
 
         if( $response->code == 200 && isset($response->body->success) && $response->body->success == true ) {
             foreach($response->body->rooms as $room){
-                // RoomId is unique so can go out.
-                return true;
+                if(isset($this->id)){
+                    return true; // RoomId is unique
+                } else {
+                    // Need to check that roomName is exactly the same.
+                    if($this->name == $room->name) {
+                        return true;
+                    }
+                }
             }
         } else {
             if ($verbose){

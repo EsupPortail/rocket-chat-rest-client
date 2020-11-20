@@ -6,27 +6,34 @@ use Httpful\Request;
 use RocketChat\Client;
 
 class UserManager extends Client {
-	public $adminusername;
-	private $adminpassword;
-	public $adminid;
 
-	public function __construct($adminusername, $adminpassword = null, $instanceurl = null, $restroot = null){
+	public function __construct($tokenmode, $adminusernameorid, $adminpasswordortoken = null, $instanceurl = null, $restroot = null){
 		if(!is_null($instanceurl) && !is_null($restroot)){
 			parent::__construct($instanceurl, $restroot);
 		}else {
 			parent::__construct();
 		}
-		$this->adminusername = $adminusername;
-		$this->adminpassword = $adminpassword;
-		$this->login();
+		if ($tokenmode){
+		    $this->prepare_connection_with_token($adminusernameorid, $adminpasswordortoken);
+        } else {
+            $this->login($adminusernameorid, $adminpasswordortoken);
+        }
 	}
+	public function prepare_connection_with_token($userid, $authtoken){
+	    // Save auth token for future requests
+        $tmp = Request::init()
+            ->addHeader('X-Auth-Token', $authtoken)
+            ->addHeader('X-User-Id', $userid);
+        Request::ini( $tmp );
+        return true;
+    }
 
 	/**
 	* Authenticate with the REST API.
 	*/
-	public function login() {
+	public function login($adminusername, $adminpassword) {
 		$response = Request::post( $this->api . 'login' )
-			->body(array( 'user' => $this->adminusername, 'password' => $this->adminpassword ))
+			->body(array( 'user' => $adminusername, 'password' => $adminpassword ))
 			->send();
 
 		if( $response->code == 200 && isset($response->body->status) && $response->body->status == 'success' ) {
@@ -35,7 +42,6 @@ class UserManager extends Client {
                 ->addHeader('X-Auth-Token', $response->body->data->authToken)
                 ->addHeader('X-User-Id', $response->body->data->userId);
             Request::ini( $tmp );
-            $this->adminid = $response->body->data->userId;
             return true;
 		}
         $this->logger->error( $response->body->error . "\n" );

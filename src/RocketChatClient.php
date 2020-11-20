@@ -147,7 +147,10 @@ class Client{
 	 * @return bool
 	 */
 	protected static function success(\Httpful\Response $response) {
-		return $response->code == 200 && isset($response->body->success) && $response->body->success == true;
+		return $response->code == 200 &&
+            ((isset($response->body->success) && $response->body->success == true)
+                || (isset($response->body->status) && $response->body->status == 'success')
+            );
 	}
 
 }

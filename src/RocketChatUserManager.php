@@ -43,8 +43,9 @@ class UserManager extends Client {
 				->addHeader('X-User-Id', $response->body->data->userId);
 			Request::ini( $tmp );
 			return true;
-		}
-		throw new RocketChatException($response);
+		} else {
+            throw new RocketChatException($response);
+        }
 	}
 
 	public function logout() {

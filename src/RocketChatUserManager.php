@@ -44,8 +44,8 @@ class UserManager extends Client {
 			Request::ini( $tmp );
 			return true;
 		} else {
-            throw new RocketChatException($response);
-        }
+			throw new RocketChatException($response);
+		}
 	}
 
 	public function logout() {
@@ -83,9 +83,14 @@ class UserManager extends Client {
 	 * Create a new user.
 	 */
 	public function create($user) {
-		$info = $this->info($user);
-		if ($info and isset($info->user)) return $info->user;
-
+		try{
+			$info = $this->info($user);
+			if ($info and isset($info->user)){
+				
+			} return $info->user;
+		} catch(RocketChatException $e){
+			// No error trigger here
+		}
 		$response = Request::post( $this->api . 'users.create' )
 			->body(array(
 				'name' => $user->nickname,

@@ -2,6 +2,7 @@
 
 namespace RocketChat;
 
+use Httpful\Exception\JsonParseException;
 use Httpful\Request;
 use Monolog\Handler\ErrorLogHandler;
 use Monolog\Logger;
@@ -29,7 +30,30 @@ class Client{
 		// set template request to send and expect JSON
 		$tmp = Request::init()
 			->sendsJson()
-			->expectsJson();
+			->parseWith(
+				function($body){
+					$body = self::stripBom($body);
+					if (empty($body))
+						return null;
+					$parsed = json_decode($body, false);
+					if (is_null($parsed) && 'null' !== strtolower($body)){
+						// Search for html and title
+						$title = 0;
+						$dom = new \DOMDocument();
+						if($dom->loadHTML($body)){
+							$title = $dom->getElementsByTagName('title');
+							if(!empty($title) && $title->count() >0 && !empty($title->item(0)->textContent)){
+								$title = intval(preg_replace('/[^0-9]/', '', $title->item(0)->textContent));
+							} else {
+								$title = -1;
+							}
+
+						}
+						throw new RocketChatException('Error while parsing json due to : ' . $body, $title);
+					}
+					return $parsed;
+				}
+			);
 		Request::ini( $tmp );
 	}
 
@@ -148,9 +172,19 @@ class Client{
 	 */
 	protected static function success(\Httpful\Response $response) {
 		return $response->code == 200 &&
-            ((isset($response->body->success) && $response->body->success == true)
-                || (isset($response->body->status) && $response->body->status == 'success')
-            );
+			((isset($response->body->success) && $response->body->success == true)
+				|| (isset($response->body->status) && $response->body->status == 'success')
+			);
+	}
+	protected static function stripBom($body)
+	{
+		if ( substr($body,0,3) === "\xef\xbb\xbf" )  // UTF-8
+			$body = substr($body,3);
+		else if ( substr($body,0,4) === "\xff\xfe\x00\x00" || substr($body,0,4) === "\x00\x00\xfe\xff" )  // UTF-32
+			$body = substr($body,4);
+		else if ( substr($body,0,2) === "\xff\xfe" || substr($body,0,2) === "\xfe\xff" )  // UTF-16
+			$body = substr($body,2);
+		return $body;
 	}
 
 }

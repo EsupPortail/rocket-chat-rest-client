@@ -55,10 +55,18 @@ final class GroupTest extends TestCase
     /**
     * @depends testCanCreateGroup
     */
+    public function testCantInviteInexistantUserInGroup($group): Group
+    {
+      $this->expectException("RocketChat\RocketChatException");
+      // On ne peut pas inviter un utilisateur inexistant
+      $group->invite("test_objet_user");
+    }
+
+    /**
+    * @depends testCanCreateGroup
+    */
     public function testCanInviteGroup($group): Group
     {
-      // On ne peut pas inviter un utilisateur inexistant
-      $this->assertFalse($group->invite("test_objet_user"));
       $objet_user = new User("test_objet_user", "resu_tejbo_tset", array("email"=>"test_objet_user@test.org", "nickname" => "Test Objet_user"));
       $this->assertNotFalse($objet_user->create(),"We should be able to create a missing user before inviting him");
       $this->assertTrue($group->invite($objet_user), "Can't invite a user through object");

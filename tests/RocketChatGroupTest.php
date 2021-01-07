@@ -34,6 +34,16 @@ final class GroupTest extends TestCase
     /**
     * @depends testCanCreateGroup
     */
+    public function testCanTestGroupExistence($group): void
+    {
+      $this->assertTrue($group->isGroupAlreadyExists());
+      $faux_groupe = new Group("uastieanstaudtnrestui");
+      $this->assertFalse($faux_groupe->isGroupAlreadyExists());
+    }
+
+    /**
+    * @depends testCanCreateGroup
+    */
     public function testCanArchiveGroup($group): Group
     {
       $this->assertTrue($group->archive());

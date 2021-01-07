@@ -391,24 +391,17 @@ class Group extends Client {
 	}
 
 	public function isGroupAlreadyExists(){
-		if(isset($this->id)) {
-			$response = Request::get( $this->api . 'rooms.adminRooms?filter=' . $this->id )->send();
-		} else {
-			$response = Request::get( $this->api . 'rooms.adminRooms?filter=' . $this->name )->send();
-		}
-
+		$response = Request::get( $this->api . 'rooms.adminRooms?filter=' . $this->name )->send();
 
 		if( self::success($response) ) {
 			foreach($response->body->rooms as $room){
-				if(isset($this->id)){
-					return true; // RoomId is unique
+				if($this->name == $room->name) {
+					return true;
 				} else {
-					// Need to check that roomName is exactly the same.
-					if($this->name == $room->name) {
-						return true;
-					}
+					return false;
 				}
 			}
+			return false;
 		} else {
 			throw new RocketChatException($response);
 		}

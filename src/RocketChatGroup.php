@@ -121,7 +121,7 @@ class Group extends Client {
 	/**
 	* Set the announcement of this group, as the logged-in user
 	*/
-	public function setAnnouncement( $text, $verbose = false ) {
+	public function setAnnouncement( $text ) {
 		$message = is_string($text) ? array( 'announcement' => $text ) : $text;
 
 		$response = Request::post( $this->api . 'groups.setAnnouncement' )
@@ -202,7 +202,7 @@ class Group extends Client {
 	/**
 	* Removes a user from the private group.
 	*/
-	public function kick( $user , $verbose = false ){
+	public function kick( $user ){
 		// get group and user ids
 		$userId = is_string($user) ? $user : $user->id;
 
@@ -220,7 +220,7 @@ class Group extends Client {
 	/**
 	 * Adds user to the private group.
 	 */
-	public function invite( $user, $verbose = false ) {
+	public function invite( $user ) {
 
 		$userId = is_string($user) ? $user : $user->id;
 
@@ -274,7 +274,7 @@ class Group extends Client {
 	/**
 	 * Adds moderator to the private group.
 	 */
-	public function addModerator( $user , $verbose = false) {
+	public function addModerator( $user ) {
 
 		$userId = is_string($user) ? $user : $user->id;
 
@@ -292,7 +292,7 @@ class Group extends Client {
 	/**
 	 * Removes moderator of the private group.
 	 */
-	public function removeModerator( $user , $verbose = false) {
+	public function removeModerator( $user ) {
 
 		$userId = is_string($user) ? $user : $user->id;
 
@@ -326,6 +326,9 @@ class Group extends Client {
 		}
 	}
 
+	/**
+	* Lists the moderators of a private group.
+	*/
 	public function moderators(){
 		$response = Request::get( $this->api . 'groups.moderators?roomId=' . $this->id )->send();
 

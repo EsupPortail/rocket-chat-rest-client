@@ -6,7 +6,6 @@ use Httpful\Request;
 use RocketChat\Client;
 
 class UserManager extends Client {
-
     public function __construct($tokenmode, $adminusernameorid, $adminpasswordortoken = null, $instanceurl = null, $restroot = null){
         if(!is_null($instanceurl) && !is_null($restroot)){
             parent::__construct($instanceurl, $restroot);
